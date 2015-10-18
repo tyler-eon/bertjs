@@ -220,7 +220,7 @@ var BertClass = function() {
 
     this.decode_big = function(data, byteLength) {
         if (byteLength == null) { byteLength = 4; }
-        var arity = this.decode_int(data, 4);
+        var arity = this.decode_int(data, byteLength);
         var length = arity[0];
         var sign = this.decode_int(arity[1], 1);
         var parts = this.split(sign[1], length);
