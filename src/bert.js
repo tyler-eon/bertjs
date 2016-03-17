@@ -95,7 +95,7 @@ var BertClass = function() {
         else {
             return [data.slice(0, length), data.slice(length)];
         }
-    }
+    };
 
     // Decode a string or array into a JavaScript object.
     this.decode = function(data) {
@@ -205,7 +205,7 @@ var BertClass = function() {
         }
         var removenil = this.decode_data(elements);
         if (removenil[0].type != "nil") {
-            throw "Lists parsed by this tool are expected to end properly, with a nil terminator."
+            throw "Lists parsed by this tool are expected to end properly, with a nil terminator.";
         }
         return [arr, removenil[1]];
     };
@@ -229,7 +229,7 @@ var BertClass = function() {
         for (var i = 0; i < length; i++) {
             num += elements[i] * Math.pow(256, i);
         }
-        if (sign[0] != 0) { num * -1; }
+        if (sign[0] != 0) { num *= -1; }
         return [num, parts[1]];
     };
 
@@ -272,7 +272,7 @@ var BertClass = function() {
     };
 
     this.encode_data = function(obj, buffer) {
-        return this["encode_" + obj.type](obj.value, buffer)
+        return this["encode_" + obj.type](obj.value, buffer);
     };
 
     this.encode_num = function(num, byteLength, buffer) {
@@ -326,7 +326,7 @@ var BertClass = function() {
 
     this.encode_binary = function(data, buffer) {
         if (data.length > this.four_byte_max_number) {
-            throw "Your binary string is too long. Seriously, way too long."
+            throw "Your binary string is too long. Seriously, way too long.";
         }
         buffer.push(109);
         this.encode_num(data.length, 4, buffer);
