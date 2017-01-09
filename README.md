@@ -2,6 +2,8 @@
 
 A JavaScript library for encoding and decoding BERT data. Primarily targeted for use with WebSocket.
 
+This project has been converted to ECMAScript 6, which all major browsers appear to support at the time of this change.
+
 ## Why
 
 I originally tried [rustyio/BERT-JS](https://github.com/rustyio/BERT-JS), and
@@ -62,8 +64,9 @@ array further because the WebSocket implementation handles that for us.
 
 ## TODO
 
-1. Implement `Bert.Map` helper function and associated encoder functionality.
-2. Cleanup code. This first iteration works great but looks ugly.
+- Implement encoders for `List`, `Float`, `String` types.
+- Implement `Bert.Map` helper, decoder, and encoder.
+- Cleanup code. The "second" iteration works great but looks better thanks to ES6, but it could be even better.
 
 ## references
 
