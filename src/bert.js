@@ -290,10 +290,19 @@ class Bert {
     return buffer
   }
 
+  static encode_small_int(data, buffer) {
+    if (data > 255)
+      return this.encode_int(data, buffer)
+    return this.encode_num(data, 1, buffer)
+  }
+
   static encode_int(data, buffer) {
     if (data > this.four_byte_max_number())
       throw "Can only encode integers up to " + this.four_byte_max_number()
-    return this.encode_num(data, 4, buffer)
+    else if (data < 256)
+      return this.encode_small_int(data, buffer)
+    else
+      return this.encode_num(data, 4, buffer)
   }
 
   static encode_atom(data, buffer) {
