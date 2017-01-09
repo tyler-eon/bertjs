@@ -76,24 +76,24 @@ class Bert {
       return [data[0], data.slice(1)]
   }
 
-// Splits the data in two, where the first part of the split is `length`
-// long and the second part are all remaining elements after that.
-static split(data, length) {
-  if (length == null) { length = 1 }
-  if (typeof(data) == "string")
-    return [data.substring(0, length), data.substring(length)]
-  else
-    return [data.slice(0, length), data.slice(length)]
-}
+  // Splits the data in two, where the first part of the split is `length`
+  // long and the second part are all remaining elements after that.
+  static split(data, length) {
+    if (length == null) { length = 1 }
+    if (typeof(data) == "string")
+      return [data.substring(0, length), data.substring(length)]
+    else
+      return [data.slice(0, length), data.slice(length)]
+  }
 
-// Decode a string or array into a JavaScript object.
-static decode(data) {
-  var parts = this.next_token(data)
-  if (BERT_TOKENS[parts[0]] != "start")
-    throw "Data must begin with an appropriate start token, actually starts with " + parts[0]
-  var result = this.decode_data(parts[1])
-  return result[0].value
-}
+  // Decode a string or array into a JavaScript object.
+  static decode(data) {
+    var parts = this.next_token(data)
+    if (BERT_TOKENS[parts[0]] != "start")
+      throw "Data must begin with an appropriate start token, actually starts with " + parts[0]
+    var result = this.decode_data(parts[1])
+    return result[0].value
+  }
 
   static decode_data(data) {
     var parts  = this.next_token(data),
