@@ -50,6 +50,7 @@ class BertObj {
  * encoding process will generate an array of byte data given a BertObj object.
  */
 class Bert {
+  static Nil() { return new BertObj("nil", []) }
   static Int(value) { return new BertObj("int", value) }
   static Float(value) { return new BertObj("new_float", value) }
   static Atom(value) { return new BertObj("atom", value) }
@@ -147,6 +148,7 @@ class Bert {
         creation = this.decode_int(serial[1], 1)
     return [atom[0] + "<" + id[0] + ">", creation[1]]
   }
+  static Nil() { return new BertObj("nil", null) }
 
   static decode_small_tuple(data) {
     return this.decode_tuple(data, 1)
@@ -303,6 +305,11 @@ class Bert {
       return this.encode_small_int(data, buffer)
     else
       return this.encode_num(data, 4, buffer)
+  }
+
+  static encode_nil(data, buffer) {
+    buffer.push(106)
+    return buffer
   }
 
   static encode_atom(data, buffer) {
