@@ -323,6 +323,33 @@ class Bert {
     return buffer
   }
 
+  static encode_string(data, buffer) {
+    var length = data.length, bytes = 2
+    if (length > 65535)
+      return this.encode_list(data, buffer)
+
+    buffer.push(107)
+    this.encode_num(length, bytes, buffer)
+    for (var i = 0; i < length; i++) {
+      this.encode_data(data[i], buffer)
+    }
+    return buffer
+  }
+
+  static encode_list(data, buffer) {
+    var length = data.length, bytes = 4
+    if (length > this.four_byte_max_number())
+      this.max_number_error()
+
+    buffer.push(108)
+    this.encode_num(length, bytes, buffer)
+    for (var i = 0; i < length; i++) {
+      this.encode_data(data[i], buffer)
+    }
+    this.encode_nil(this.Nil(), buffer)
+    return buffer
+  }
+
   static encode_tuple(data, buffer) {
     var length = data.length, bytes = 0
     if (length > this.four_byte_max_number())
