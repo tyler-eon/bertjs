@@ -66,6 +66,11 @@ class Bert {
       throw "Must use an array to create lists."
     return new BertObj("list", value)
   }
+  static IntList(value) {
+    if (!(value instanceof Array))
+      throw "Must use an array to create lists."
+    return new BertObj("string", value)
+  }
 
   static four_byte_max_number() { return 134217727 }
 
