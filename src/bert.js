@@ -298,7 +298,7 @@ class Bert {
 
   static encode_int(data, buffer) {
     if (data > this.four_byte_max_number())
-      throw "Can only encode integers up to " + this.four_byte_max_number()
+      this.max_number_error()
     else if (data < 256)
       return this.encode_small_int(data, buffer)
     else
@@ -319,7 +319,7 @@ class Bert {
   static encode_tuple(data, buffer) {
     var length = data.length, bytes = 0
     if (length > this.four_byte_max_number())
-      throw "Your list is too long. Seriously, way too long."
+      this.max_number_error()
     else if (length < 256) {
       buffer.push(104)
       bytes = 1
@@ -336,9 +336,9 @@ class Bert {
   }
 
   static encode_binary(data, buffer) {
-    if (data.length > this.four_byte_max_number()) {
-      throw "Your binary string is too long. Seriously, way too long."
-    }
+    if (data.length > this.four_byte_max_number())
+      this.max_number_error()
+
     buffer.push(109)
     this.encode_num(data.length, 4, buffer)
     return this.encode_string_to_buffer(data, buffer)
@@ -349,6 +349,10 @@ class Bert {
       buffer.push(str.charCodeAt(i))
     }
     return buffer
+  }
+
+  static max_number_error() {
+    throw "Your data is too long. Seriously, way too long."
   }
 }
 
