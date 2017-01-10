@@ -6,9 +6,8 @@ This project has been converted to ECMAScript 6, which all major browsers appear
 
 ## Why
 
-I originally tried [rustyio/BERT-JS](https://github.com/rustyio/BERT-JS), and
-noticed an [update](https://github.com/mgechev/bert.js) of the project, but I
-had two main issues with both of them:
+I tried a couple different JS implementations of BERT encoders/decoders but
+found two (personal) issues with them:
 
 1. I did not like the way integers were being encoded and decoded. I'm not sure
 if the method in my own code is faster, but it's certainly more concise and
@@ -16,6 +15,10 @@ operates in what I believe to be a more logical manner.
 2. I was having trouble using it to decode/encode data arrays for use in
 WebSockets, which was the target method of communication for the project that
 spawned this.
+
+Bonus reason #3: I wanted to explore low-level functionality in JavaScript, such
+as bit operations to construct arrays of "binary" data to pass through a web
+socket.
 
 ## How
 
@@ -27,25 +30,31 @@ Two core methods exist:
 Obviously the first one encodes JavaScript into BERT and the second one decodes
 BERT into JavaScript. The main constraints are:
 
-- To `encode` data you **must** pass in a `BertObj`.
-- To `decode` data you **must** pass in a string or an array.
+- To `encode` data you **should** pass in a `BertObj`. If you don't, a function
+called `smart_cast/1` will be used to try to "intelligently" determine the
+appropriate associated Erlang type. But because JavaScript has fewer types than
+Erlang, chances are that something might be cast incorrectly, so explicitly
+creating Bert helper objects is recommended. But not required.
+- To `decode` data you **must** pass in a string or an array. This assumes that
+you're dealing with data from a `blob` or `arraybuffer`, the two type options
+for web sockets when sending and receiving data.
 
-The `BertObj` exists to ensure the encoder knows which Erlang type you are
-mapping a JavaScript object to, instead of guessing and getting it wrong. I have
-included helper functions to generate correctly-type BERT wrapper objects:
+Helper functions exist to quickly and easily create `BertObj` instances. I
+shall reiterate: it is _highly_ recommended that you use these helpers instead
+of passing raw JavaScript objects to the encoder. It's the only way to create
+and encode atoms and tuples, for example. Not using the helper functions will
+seriously limit what kind of Erlang types you can send upstream.
 
-- `Bert.Int`
-- `Bert.Float`
-- `Bert.Atom`
-- `Bert.String`
-- `Bert.Binary`
-- `Bert.Tuple`
-- `Bert.List`
+## Maps
 
-Pass in a JavaScript object to any of those functions and the encoder will
-attempt to encode the value given as the associated type, or throw an error if
-something goes wrong (or possibly fail silently and build you an incorrect BERT
-payload).
+A note about using the `Map` BERT type:
+
+JavaScript does not have a way to iterate over the keys in a Map while retaining
+the key _type_. In JavaScript, retrieving keys from a regular object will always
+return a list of strings. If you **need** to use typed keys and can't have
+strings, then you should pass in an array of arrays, where each inside array has
+two elements: a key and a value, in that order. This will construct a special
+kind of Map that can be used to preserve key types during encoding.
 
 ## WebSockets
 
@@ -64,8 +73,7 @@ array further because the WebSocket implementation handles that for us.
 
 ## TODO
 
-- Implement encoders for `List`, `Float`, `String` types.
-- Implement `Bert.Map` helper, decoder, and encoder.
+- Implement encoder for `Float` types.
 - Cleanup code. The "second" iteration works great but looks better thanks to ES6, but it could be even better.
 
 ## references
