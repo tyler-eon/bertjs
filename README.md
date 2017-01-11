@@ -93,6 +93,12 @@ Bert.Map([
 ])
 ```
 
+It's also worth noting that decoding an Erlang Map to JavaScript will result in
+either `Number` or `String` "keys" for the resulting object. For string keys,
+the dot notation (e.g. `obj.some_key`) will work but for number keys the index
+operator must be used (e.g. `obj[42]`). The index operator may still be used
+with string keys (e.g. `obj["some_key"]`).
+
 ## WebSockets
 
 I spoke about how I was targeting WebSockets earlier. I've included an
