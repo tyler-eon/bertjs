@@ -346,7 +346,7 @@ class Bert {
     buffer.push(107)
     this.encode_num(length, bytes, buffer)
     for (var i = 0; i < length; i++) {
-      this.encode_data(data[i], buffer)
+      buffer.push(data.charCodeAt(i))
     }
     return buffer
   }
