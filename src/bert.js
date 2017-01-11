@@ -310,6 +310,7 @@ class Bert {
   static encode_small_int(data, buffer) {
     if (data > 255)
       return this.encode_int(data, buffer)
+    buffer.push(97)
     return this.encode_num(data, 1, buffer)
   }
 
@@ -319,6 +320,7 @@ class Bert {
     else if (data < 256)
       return this.encode_small_int(data, buffer)
     else
+      buffer.push(98)
       return this.encode_num(data, 4, buffer)
   }
 
