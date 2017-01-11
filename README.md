@@ -45,6 +45,25 @@ of passing raw JavaScript objects to the encoder. It's the only way to create
 and encode atoms and tuples, for example. Not using the helper functions will
 seriously limit what kind of Erlang types you can send upstream.
 
+e.g.
+
+```javascript
+# Encode string as a binary
+Bert.encode("strings are encoded as erlang binary values")
+Bert.encode(Bert.Binary("explicitly mark a string as a binary"))
+
+# Encode string as a "string" (char list)
+Bert.encode(Bert.String("becomes a char list"))
+
+# Encode a list of values
+Bert.encode(["binary", 42, Bert.Atom("atom")])
+Bert.encode(Bert.List([ ... ]))
+
+# Encode a map of key-value pairs
+Bert.encode({ one: "two", two: Bert.Atom("three"), three: [] })
+Bert.encode(Bert.Map( ... ))
+```
+
 ## Maps
 
 A note about using the `Map` BERT type:
@@ -55,6 +74,24 @@ return a list of strings. If you **need** to use typed keys and can't have
 strings, then you should pass in an array of arrays, where each inside array has
 two elements: a key and a value, in that order. This will construct a special
 kind of Map that can be used to preserve key types during encoding.
+
+e.g.
+
+```javascript
+# All keys become binary strings (values are encoded correctly still)
+Bert.Map({
+  swamp: "thing",
+  42: "the answer",
+  key: Bert.Atom("value"),
+})
+
+# Preserve key types when encoding key-value pairs
+Bert.Map([
+  [Bert.Atom("swamp"), "thing"],
+  [42, "the answer"],
+  ["key", Bert.Atom("value")],
+])
+```
 
 ## WebSockets
 
