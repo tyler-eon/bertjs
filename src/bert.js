@@ -61,6 +61,11 @@ class Bert {
       throw "Must use an array to create tuples."
     return new BertObj("tuple", value)
   }
+  static Map(value) {
+    if (!(value instanceof Object || value instanceof Array))
+      throw "Must use an object or an array to create maps."
+    return new BertObj("map", value)
+  }
   static List(value) {
     if (!(value instanceof Array))
       throw "Must use an array to create lists."
@@ -153,7 +158,6 @@ class Bert {
         creation = this.decode_int(serial[1], 1)
     return [atom[0] + "<" + id[0] + ">", creation[1]]
   }
-  static Nil() { return new BertObj("nil", null) }
 
   static decode_small_tuple(data) {
     return this.decode_tuple(data, 1)
@@ -259,13 +263,14 @@ class Bert {
 
   // Encode an object into an array of byte data.
   static encode(obj) {
-    if (!(obj instanceof BertObj))
-      obj = this.smart_cast(obj)
     var buffer = [131]
     return this.encode_data(obj, buffer)
   }
 
   static smart_cast(obj) {
+    if (obj == null)
+      return this.Nil()
+
     var type = typeof(obj)
     if (type == 'number') {
       if (obj % 1 === 0)
@@ -273,17 +278,22 @@ class Bert {
       else
         return this.Float(obj)
     }
-    else if (type == 'string') {
+    else if (type == 'string')
       return this.Binary(obj)
-    }
     else if (type == 'array') {
+      if (obj.length == 0)
+        return this.Nil()
       return this.List(obj)
     }
+    else if (type == 'object')
+      return this.Map(obj)
     else
       throw "Invalid object type: " + type + ". Cannot encode."
   }
 
   static encode_data(obj, buffer) {
+    if (!(obj instanceof BertObj))
+      obj = this.smart_cast(obj)
     return this["encode_" + obj.type](obj.value, buffer)
   }
 
@@ -370,6 +380,45 @@ class Bert {
     this.encode_num(length, bytes, buffer)
     for (var i = 0; i < length; i++) {
       this.encode_data(data[i], buffer)
+    }
+    return buffer
+  }
+
+  static encode_map(data, buffer) {
+    buffer.push(116)
+
+    if (data instanceof Array)
+      return this.encode_map_from_array(data, buffer)
+    else
+      return this.encode_map_from_object(data, buffer)
+  }
+
+  static encode_map_from_array(data, buffer) {
+    let length = data.length,
+        pair, key, value
+    if (length > this.four_byte_max_number())
+      this.max_number_error()
+
+    this.encode_num(length, 4, buffer)
+    for (var i = 0; i < length; i++) {
+      pair = data[i]
+      key = this.encode_data(pair[0], buffer)
+      value = this.encode_data(pair[1], buffer)
+    }
+    return buffer
+  }
+
+  static encode_map_from_object(data, buffer) {
+    let keys   = Object.keys(data),
+        length = keys.length
+    if (length > this.four_byte_max_number())
+      this.max_number_error()
+
+    this.encode_num(length, 4, buffer)
+    for (var i = 0; i < length; i++) {
+      let key = keys[i]
+      this.encode_binary(key, buffer)
+      this.encode_data(data[key], buffer)
     }
     return buffer
   }
