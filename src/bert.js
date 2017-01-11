@@ -396,16 +396,15 @@ class Bert {
   }
 
   static encode_map_from_array(data, buffer) {
-    let length = data.length,
-        pair, key, value
+    let length = data.length
     if (length > this.four_byte_max_number())
       this.max_number_error()
 
     this.encode_num(length, 4, buffer)
     for (var i = 0; i < length; i++) {
-      pair = data[i]
-      key = this.encode_data(pair[0], buffer)
-      value = this.encode_data(pair[1], buffer)
+      let pair = data[i]
+      this.encode_data(pair[0], buffer)
+      this.encode_data(pair[1], buffer)
     }
     return buffer
   }
