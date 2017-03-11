@@ -26,14 +26,14 @@ class BertWS {
       }
     }
 
-    if (handlers.success != null) {this.on_success = handlers.success }
+    if (handlers.on_success != null) {this.on_success = handlers.on_success }
     else {
       this.on_success = (e) => {
         console.log("WebSocket connection to " + url + " received data.", e)
       }
     }
 
-    if (handlers.error != null) {this.on_error = handlers.error }
+    if (handlers.on_error != null) {this.on_error = handlers.on_error }
     else {
       this.on_error = (e) => {
         console.log("WebSocket connection to " + url + " received an error.", e)
