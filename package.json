@@ -1,0 +1,24 @@
+{
+  "author": "Tyler Eon <tyler@eon.dev> (https://eon.dev)",
+  "name": "bertjs",
+  "version": "1.0.0",
+  "description": "A JavaScript library for encoding and decoding BERT data. Primarily targeted for use with web sockets, but it can work with any transport protocol.",
+  "main": "src/bert.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kolorahl/bertjs.git"
+  },
+  "keywords": [
+    "bert",
+    "erlang",
+    "elixir"
+  ],
+  "license": "GPL-3.0-or-later",
+  "bugs": {
+    "url": "https://github.com/kolorahl/bertjs/issues"
+  },
+  "homepage": "https://github.com/kolorahl/bertjs#readme"
+}
