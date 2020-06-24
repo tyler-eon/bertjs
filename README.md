@@ -1,4 +1,4 @@
-# bertjs
+# bert.ws
 
 A JavaScript library for encoding and decoding _BERT_ data. Primarily targeted for use with web sockets, but it can work with any transport protocol.
 
@@ -18,7 +18,9 @@ If you want even more detailed explanation, you can refer to the BERT-RPC spec o
 Two methods: manual and npm.
 
 1. To install manually, simply copy `bert.js` into your project. Done! Unfortunately, if the file is ever updated it's on you to keep track of the version manually and update the file accordingly.
-2. To install via npm, simply do `npm install bertjs`. You can also add it as a dependency to `packages.json` and let npm manage version locking for you. Fun times!
+2. To install via npm, simply do `npm install bert.ws`. You can also add it as a dependency to `packages.json` and let npm manage version locking for you. Fun times!
+
+Why `bert.ws`? Both `bert` and `bert.js` are taken by packages equally as old as this one that will also probably never receive an update. However, mine has the advantage of including a web socket module that simplifies integration for that protocol, thus the `.ws` suffix.
 
 ## Usage
 

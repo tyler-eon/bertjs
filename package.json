@@ -1,6 +1,6 @@
 {
   "author": "Tyler Eon <tyler@eon.dev> (https://eon.dev)",
-  "name": "bertjs",
+  "name": "bert.ws",
   "version": "1.0.0",
   "description": "A JavaScript library for encoding and decoding BERT data. Primarily targeted for use with web sockets, but it can work with any transport protocol.",
   "main": "src/bert.js",
