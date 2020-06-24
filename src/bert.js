@@ -51,7 +51,7 @@ const BERT_TOKENS = {
  * can be strings or binaries or atoms. Don't even get me started on numbers.
  * Forcing explicit typing like this causes less errors during encoding.
  */
-class BertObj {
+export class BertObj {
   constructor(type, value) {
     this.type = type
     this.value = value
@@ -65,7 +65,7 @@ class BertObj {
  * one byte of data, or an array, with each element being one byte of data. The
  * encoding process will generate an array of byte data given a BertObj object.
  */
-class Bert {
+export default class Bert {
   static Nil() { return new BertObj("Nil", []) }
   static Int(value) { return new BertObj("Int", value) }
   static Float(value) { return new BertObj("NewFloat", value) }
@@ -482,5 +482,3 @@ class Bert {
     throw "Your data is too long. Seriously, way too long."
   }
 }
-
-export default Bert
