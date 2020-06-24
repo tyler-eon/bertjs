@@ -31,7 +31,7 @@ Two core methods exist:
 
 Obviously the first one encodes JavaScript into BERT and the second one decodes BERT into JavaScript. The main constraints are:
 
-- To `encode` data you **should** pass in a `BertObj`. If you don't, a function called `smart_cast/1` will be used to try to "intelligently" determine the appropriate associated Erlang type. But because JavaScript has fewer types than Erlang, chances are that something might be cast incorrectly, so explicitly creating Bert helper objects is recommended. But not required.
+- To `encode` data you **should** pass in a `BertObj`. If you don't, a function called `smartCast/1` will be used to try to "intelligently" determine the appropriate associated Erlang type. But because JavaScript has fewer types than Erlang, chances are that something might be cast incorrectly, so explicitly creating Bert helper objects is recommended. But not required.
 - To `decode` data you **must** pass in a string or an array. This assumes that you're dealing with data from a `blob` or `arraybuffer`, the two type options for web sockets when sending and receiving data.
 
 Helper functions exist to quickly and easily create `BertObj` instances. I shall reiterate: it is _highly_ recommended that you use these helpers instead of passing raw JavaScript objects to the encoder. It's the only way to create and encode atoms and tuples, for example. Not using the helper functions will seriously limit what kind of Erlang types you can send upstream.
@@ -90,5 +90,4 @@ The basic concept, though, is that you set the WebSocket to use `"arraybuffer"` 
 
 ## TODO
 
-- Implement encoder for `Float` types.
 - Cleanup code. The current implementation works great and looks good thanks to ES6, but it could be even better.
