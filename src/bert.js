@@ -5,7 +5,7 @@
 // it under the terms of the GNU General Public License as published by
 // the Free Software Foundation, either version 3 of the License, or
 // (at your option) any later version.
-// 
+//
 // This program is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -133,6 +133,18 @@ class Bert {
 
   static handle_result(type, result) {
     return [new BertObj(type, result[0]), result[1]]
+  }
+
+  // Attribution: This code is effectively what you'll find in the node.js `Buffer` module. The primary difference is that this doesn't take endianness into consideration and always assumes the client machine is using little-endian despite the server always sending the encoded float in big-endian format.
+  // If I could find a way to account for client-side endianness better, I would do so, but for now this will have to do.
+  static decode_new_float(data) {
+    var fa = new Float64Array(1)
+    var ifa = new Uint8Array(fa.buffer)
+    var [float, rest] = this.split(data, 8)
+    for (var i = 0; i < 8; i++) {
+      ifa[7 - i] = float[i]
+    }
+    return [fa[0], rest]
   }
 
   static decode_small_int(data) {
@@ -311,6 +323,16 @@ class Bert {
     if (!(obj instanceof BertObj))
       obj = this.smart_cast(obj)
     return this["encode_" + obj.type](obj.value, buffer)
+  }
+
+  static encode_new_float(num, buffer) {
+    var fa = new Float64Array([num])
+    var ifa = new Uint8Array(fa.buffer)
+    buffer.push(70)
+    for (var i = 0; i < 8; i++) {
+      buffer.push(ifa[7 - i])
+    }
+    return buffer
   }
 
   static encode_num(num, byteLength, buffer) {
